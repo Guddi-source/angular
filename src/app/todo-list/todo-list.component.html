@@ -1,0 +1,70 @@
+<div class="row">
+    <h1>To Do List</h1>
+    <div class="col-5 btn-group btn-group-sm">
+        <a href="#" (click)="list()" class="btn btn-primary" routerLinkActive="router-link-active" >List</a>
+        <a href="#" (click)="add()" class="btn btn-primary" routerLinkActive="router-link-active" >Add</a>
+    </div>
+    <hr>
+
+   
+</div>
+
+@if(addForm) {
+    <div class="row mb-3">
+        <div class="col-4 offset-col-4 border text-center p-2 bg-grey">
+            <h6>Add List</h6>
+            <input type="text" [(ngModel)]="toDoItem" placeholder="Add ToDoList" class="form-control">
+            <br>
+            <button type="submit" (click)="submit()" class="btn btn-primary">Add</button>
+        </div>
+    </div>
+}
+
+<div class="row">
+    <div class="col-4">
+        <div class="card shadow">
+            <h5 class="card-header">
+                My Todo List
+            </h5>
+            <div class="row mt-3 mb-3">
+                <div class="col-6 ml-2 d-flex justify-content-center">
+                    <label for="sel1" class="form-label">Filter:</label>
+                    <select class="form-select" #filter id="sel1" (change)="onSelected()" name="sellist1">
+                        <option default value="all">All</option>
+                        <option value="active">Active</option>
+                        <option value="completed">Completed</option>
+                    </select>
+                </div>
+            </div>
+            <div class="card-body">
+                <ul class="list-group" *ngFor="let todo of todoService.todoList">
+                    @switch (filter.value) {
+                        @case ('active') {
+                            <div class="form-check d-flex justify-content-between" *ngIf="!todo.isCompleted">
+                                <input type="checkbox" class="form-check-input" [checked]="todo.isCompleted" (change)="changeCheckbox($event, todo)" id="complete">
+                                <label for="complete" class="form-check-label lead">{{todo.title}}</label>
+                                <button class="btn btn-danger btn-sm mx-3 flex justify-content-end" (click)="deleteTodo(todo.id)">x</button>
+                            </div><hr>
+                        }
+                        @case ('completed') {
+                            <div class="form-check d-flex justify-content-between" *ngIf="todo.isCompleted">
+                                <input type="checkbox" class="form-check-input" [checked]="todo.isCompleted" (change)="changeCheckbox($event, todo)" id="complete">
+                                <label for="complete" class="form-check-label lead">{{todo.title}}</label>
+                                <button class="btn btn-danger btn-sm mx-3 flex justify-content-end" (click)="deleteTodo(todo.id)">x</button>
+                            </div><hr>
+                        }
+                        @default {
+                            <div class="form-check d-flex justify-content-between">
+                                <input type="checkbox" class="form-check-input" [checked]="todo.isCompleted" (change)="changeCheckbox($event, todo)" id="complete">
+                                <label for="complete" class="form-check-label lead">{{todo.title}}</label>
+                                <button class="btn btn-danger btn-sm mx-3 flex justify-content-end" (click)="deleteTodo(todo.id)">x</button>
+                            </div><hr>
+                        }
+
+                    }
+                    
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>

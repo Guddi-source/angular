@@ -1,0 +1,17 @@
+
+<div class="row mt-3">
+    <div class="col-6">
+        <h2>Product List</h2><hr>
+        @for(product of products; track product) {
+            <div class="d-flex justify-content-between">
+                <div>
+                    <strong>{{product.name}}</strong><br>
+                    <span>RS.{{product.price}}</span>
+                </div>
+                <button type="button" class="btn btn-primary btn-sm"> details</button>
+            </div><hr>
+        }
+        
+    </div>
+</div>
+

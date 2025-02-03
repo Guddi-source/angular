@@ -1,13 +1,14 @@
 import { Component, OnInit } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { RouterModule, RouterOutlet } from '@angular/router';
 import { HeaderComponent } from './header/header.component';
 import { CardComponent } from './card/card.component';
 import { TodoListComponent } from './todo-list/todo-list.component';
 import { ProductListComponent } from './parent-child/product-list/product-list.component';
 import { ProductDetailsComponent } from './parent-child/product-details/product-details.component';
 import { Observable } from 'rxjs';
-import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { AppColorDirective } from './directives/app-color.directive';
 
 @Component({
   selector: 'app-root',
@@ -19,7 +20,9 @@ import { CommonModule } from '@angular/common';
     ProductListComponent,
     ProductDetailsComponent,
     ReactiveFormsModule,
-    CommonModule
+    CommonModule,
+    AppColorDirective,
+    RouterModule
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
@@ -28,6 +31,8 @@ export class AppComponent implements OnInit {
   title = 'angular_clone';
   amount = 50;
   userForm: FormGroup | any;
+  demo: FormGroup | any
+  
 
   constructor(private _fb: FormBuilder) {
 
@@ -47,6 +52,10 @@ export class AppComponent implements OnInit {
       skills: this._fb.array([this.createSkillsFormGroup()])
     });
 
+    this.demo = this._fb.group({
+      name: ['']
+    });
+
     this.checkBalance();
     // console.log(res);
 
@@ -56,6 +65,24 @@ export class AppComponent implements OnInit {
     this.obserVa.subscribe((val: number) => {
       console.log("sub 2",val);
     })
+
+   
+
+    this.demo.get('name')?.valueChanges.subscribe((value:any)=>{
+      if(value) {
+        this.createNewControl();
+      } else {
+        this.removeNewControl()
+      }
+    })
+  }
+
+  createNewControl(): void {
+    this.demo?.addControl('newControl', new FormControl(''));
+  }
+
+  removeNewControl(): void {
+    this.demo.removeControl('newControl');
   }
 
   createSkillsFormGroup(): FormGroup {
